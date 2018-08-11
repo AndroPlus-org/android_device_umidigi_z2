@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+LOCAL_PATH := device/umidigi/z2
+
 # Platform
 TARGET_BOARD_PLATFORM := mt6763
 TARGET_BOOTLOADER_BOARD_NAME := g36v63c2k_kw
@@ -52,7 +54,19 @@ BOARD_KERNEL_BASE := 0x40078000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --base 0x40078000 --pagesize 2048 --kernel_offset 0x00008000 --ramdisk_offset 0x14f88000 --second_offset 0x00e88000 --tags_offset 0x13f88000 --board 1480056755
-TARGET_PREBUILT_KERNEL := device/umidigi/z2/prebuilt/zImage
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/zImage
+
+# Mediatek support
+BOARD_HAS_MTK_HARDWARE := true
+BOARD_USES_MTK_HARDWARE := true
+MTK_HARDWARE := true
+
+# Assert
+TARGET_OTA_ASSERT_DEVICE := Z2
+
+# Workaround for error copying vendor files to recovery ramdisk
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_COPY_OUT_VENDOR := vendor
 
 # Resolution
 DEVICE_RESOLUTION := 1080x2246
@@ -61,6 +75,14 @@ TARGET_SCREEN_HEIGHT := 2246
 
 # TWRP
 # TW_DEVICE_VERSION := $(shell date -u +"%Y%m%d_%H%M")
-# TW_ALWAYS_RMRF := true
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery/root/etc/recovery.fstab
 TW_INCLUDE_FB2PNG := true
 TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone1/temp
+TW_EXTRA_LANGUAGES := true
+
+# Encryption
+TW_INCLUDE_CRYPTO := true
+TW_CRYPTO_USE_SYSTEM_VOLD := true
+
+TARGET_USES_LOGD := true
+TWRP_INCLUDE_LOGCAT := true
